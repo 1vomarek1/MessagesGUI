@@ -1,0 +1,6 @@
+name: MessagesGUI
+version: ${project.version}
+main: com.vomarek.MessagesGUIMessagesGUI
+softdepend: [PlaceholderAPI]
+authors: [1vomarek1]
+website: vomarek.com
