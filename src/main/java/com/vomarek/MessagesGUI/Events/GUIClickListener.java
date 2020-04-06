@@ -9,6 +9,7 @@ import com.vomarek.MessagesGUI.MessagesGUI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
@@ -49,6 +50,17 @@ public class GUIClickListener implements Listener {
                 }.runTaskLater(plugin, 1);
 
                 break;
+            case (48):
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.openInventory(mainMenu.previousPage().getInventory());
+                    }
+                }.runTaskLater(plugin, 1L);
+
+                break;
             case (49):
 
                 new BukkitRunnable() {
@@ -58,6 +70,17 @@ public class GUIClickListener implements Listener {
                         player.closeInventory();
                     }
                 }.runTaskLater(plugin, 1);
+
+                break;
+            case (50):
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.openInventory(mainMenu.nextPage().getInventory());
+                    }
+                }.runTaskLater(plugin, 1L);
 
                 break;
             case (53):
@@ -94,7 +117,35 @@ public class GUIClickListener implements Listener {
 
                 if (mainMenu.getChangeOrder()) {
 
-                    // TODO: Priority changing
+                    if (event.getClick().equals(ClickType.LEFT)) {
+                        group.setPriority(group.getPriority() + 1);
+
+                        mainMenu.update();
+
+                        new BukkitRunnable() {
+
+                            @Override
+                            public void run() {
+                                player.openInventory(mainMenu.getInventory());
+                            }
+
+                        }.runTaskLater(plugin, 1);
+
+                    } else if (event.getClick().equals(ClickType.RIGHT)) {
+                        group.setPriority(group.getPriority() - 1);
+
+                        mainMenu.update();
+
+                        new BukkitRunnable() {
+
+                            @Override
+                            public void run() {
+                                player.openInventory(mainMenu.getInventory());
+                            }
+
+                        }.runTaskLater(plugin, 1);
+
+                    }
 
                 } else {
                     new BukkitRunnable() {

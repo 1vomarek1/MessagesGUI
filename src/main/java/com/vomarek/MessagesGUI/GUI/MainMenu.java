@@ -56,6 +56,10 @@ public class MainMenu implements InventoryHolder {
         inventory.setItem(53, createGUIItem(Util.replace(player,"&3Create group"), new ArrayList<>(Arrays.asList(Util.replace(player, "&aClick &fto create a group"))), Material.WORKBENCH, 1, 0, false));
 
 
+        inventory.setItem(48, createGUIItem(Util.replaceColors("&3Previous page"), new ArrayList<>(Arrays.asList(Util.replace(player, "&aClick &fto go to next page"))), Material.ARROW, 1, 0, false));
+        inventory.setItem(50, createGUIItem(Util.replaceColors("&3Next page"), new ArrayList<>(Arrays.asList(Util.replace(player, "&aClick &fto go to previous page"))), Material.ARROW, 1, 0, false));
+
+
         /*
          * Top lane glass
          */
@@ -75,8 +79,6 @@ public class MainMenu implements InventoryHolder {
          */
         inventory.setItem(46, createGUIItem(Util.replaceColors("&f"), new ArrayList<>(), Material.STAINED_GLASS_PANE, 1, 15, false));
         inventory.setItem(47, createGUIItem(Util.replaceColors("&f"), new ArrayList<>(), Material.STAINED_GLASS_PANE, 1, 15, false));
-        inventory.setItem(48, createGUIItem(Util.replaceColors("&f"), new ArrayList<>(), Material.STAINED_GLASS_PANE, 1, 15, false));
-        inventory.setItem(50, createGUIItem(Util.replaceColors("&f"), new ArrayList<>(), Material.STAINED_GLASS_PANE, 1, 15, false));
         inventory.setItem(51, createGUIItem(Util.replaceColors("&f"), new ArrayList<>(), Material.STAINED_GLASS_PANE, 1, 15, false));
         inventory.setItem(52, createGUIItem(Util.replaceColors("&f"), new ArrayList<>(), Material.STAINED_GLASS_PANE, 1, 15, false));
 
@@ -89,7 +91,7 @@ public class MainMenu implements InventoryHolder {
              * Add group  to menu
              */
             if (changeOrder) {
-                inventory.setItem(i, createGUIItem(Util.replace(player, "&3"+group.getName()), new ArrayList<String>(Arrays.asList(Util.replace(player, "&aLeft Click &fto increase priority"), Util.replace(player, "&aRight Click &fto decrease priority"))), group.getMaterial(), group.getPriority() % 64 == 0 ? 1 : group.getPriority() % 64, 0, false));
+                inventory.setItem(i, createGUIItem(Util.replace(player, "&3"+group.getName()), new ArrayList<String>(Arrays.asList(Util.replace(player, "&aLeft Click &fto increase priority"), Util.replace(player, "&aRight Click &fto decrease priority"))), group.getMaterial(), Math.max(group.getPriority() % 64, 1), 0, false));
             } else {
                 inventory.setItem(i, createGUIItem(Util.replace(player, "&3"+group.getName()), new ArrayList<String>(Arrays.asList(Util.replace(player, "&aClick &fto manage this group"))), group.getMaterial(), 1, 0, false));
             }
@@ -119,6 +121,26 @@ public class MainMenu implements InventoryHolder {
 
     public MainMenu setChangeOrder(final boolean changeOrder) {
         this.changeOrder = changeOrder;
+        update();
+        return this;
+    }
+
+    public MainMenu nextPage() {
+        if (plugin.getGroupManager().getGroups().size() > (page + 1) * 14) {
+            page ++;
+        } else {
+            page = 0;
+        }
+        update();
+        return this;
+    }
+
+    public MainMenu previousPage() {
+        if (page == 0) {
+            page = (int) Math.ceil(plugin.getGroupManager().getGroups().size() / 14f) - 1;
+        } else {
+            page--;
+        }
         update();
         return this;
     }
