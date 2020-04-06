@@ -84,6 +84,9 @@ public class GroupMenu implements InventoryHolder {
             case "Info":
                 inventory.setItem(13, createGUIItem(Util.replace(player, "&3Group Settings"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&aOpened"))), Material.SIGN, 1, 0, true));
 
+                inventory.setItem(29, createGUIItem(Util.replace(this.player, "&3Group Item"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&3Group item"), Util.replace(this.player, "&aClick on item in your inventory &fto change it"))), group.getMaterial(), 1, 0, false));
+                inventory.setItem(31, createGUIItem(Util.replace(this.player, "&3Info"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&aID &f" + group.getName()), Util.replace(player, "&aPriority &f"+group.getPriority()), Util.replace(this.player, "&aPermission &fmessagesgui.group."+group.getName()))), Material.PAPER, 1, 0, false));
+                inventory.setItem(33, createGUIItem(Util.replace(this.player, "&3Delete Group"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&cClick &fto delete this group"))), Material.REDSTONE_BLOCK, 1, 0, false));
 
 
                 break;
@@ -91,8 +94,8 @@ public class GroupMenu implements InventoryHolder {
                 inventory.setItem(3, createGUIItem(Util.replace(player, "&3Join Settings"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&aOpened"))), Material.DIAMOND_CHESTPLATE, 1, 0, true));
 
                 inventory.setItem(29, createGUIItem(Util.replace(player, "&3Join Message"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&f" + this.group.getJoinMessage()), Util.replace(this.player, "&aClick &fto change join message"))), Material.NAME_TAG, 1, 0, false));
-                inventory.setItem(31, createGUIItem(Util.replace(player, "&3Join Title"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&f"), Util.replace(this.player, "&aClick &fto change join title"))), Material.PAPER, 1, 0, false));
-                inventory.setItem(33, createGUIItem(Util.replace(player, "&3Join Commands"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&f"), Util.replace(this.player, "&aClick &fto change join commands"))), Material.COMMAND_CHAIN, 1, 0, false));
+                inventory.setItem(31, createGUIItem(Util.replace(player, "&3Join Title"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&f" /* TODO: Titles */), Util.replace(this.player, "&aClick &fto change join title"))), Material.PAPER, 1, 0, false));
+                inventory.setItem(33, createGUIItem(Util.replace(player, "&3Join Commands"), new ArrayList<>(Arrays.asList(Util.replace(this.player, "&f" /* TODO: Commands */), Util.replace(this.player, "&aClick &fto change join commands"))), Material.COMMAND_CHAIN, 1, 0, false));
 
 
                 break;

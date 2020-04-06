@@ -7,12 +7,10 @@ import java.util.HashMap;
 
 public class Group {
     private MessagesGUI plugin;
-
     private String name;
-
     private HashMap<String, String> messages;
-
     private Integer priority;
+    private Material item;
 
     public Group(String name, MessagesGUI plugin) {
         this.name = name;
@@ -28,6 +26,12 @@ public class Group {
 
 
         priority = plugin.getConfigFile().get().getInt("Groups." + name + ".Priority", 0);
+
+        try {
+            item = Material.valueOf(plugin.getConfigFile().get().getString("Groups." + name + ".Item", "GRASS"));
+        } catch (Exception e) {
+            item = Material.GRASS;
+        }
 
     }
 
@@ -81,6 +85,13 @@ public class Group {
     }
 
     public Material getMaterial() {
-        return Material.GRASS;
+        return item;
+    }
+
+    public Group setItem(Material type) {
+        item = type;
+        plugin.getConfigFile().get().set("Groups." + name + ".Item", type.toString());
+        plugin.getConfigFile().save();
+        return this;
     }
 }

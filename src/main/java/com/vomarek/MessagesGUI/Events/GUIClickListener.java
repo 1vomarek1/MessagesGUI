@@ -31,10 +31,10 @@ public class GUIClickListener implements Listener {
 
         event.setCancelled(true);
 
-        if (event.getClickedInventory() == null || event.getClickedInventory().getType() == null || event.getClickedInventory().getType().equals(InventoryType.PLAYER)) return;
-
         final Player player = (Player) event.getWhoClicked();
         final MainMenu mainMenu = (MainMenu) event.getInventory().getHolder();
+
+        if (event.getClickedInventory() == null || event.getClickedInventory().getType() == null || event.getClickedInventory().getType().equals(InventoryType.PLAYER)) return;
 
         switch (event.getSlot()) {
             case (45):
@@ -173,10 +173,25 @@ public class GUIClickListener implements Listener {
 
         event.setCancelled(true);
 
-        if (event.getClickedInventory() == null || event.getClickedInventory().getType() == null || event.getClickedInventory().getType().equals(InventoryType.PLAYER)) return;
-
         final Player player = (Player) event.getWhoClicked();
         final GroupMenu groupMenu = (GroupMenu) event.getInventory().getHolder();
+
+        if (event.getClickedInventory() != null && event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
+            if (event.getCurrentItem() != null) {
+                groupMenu.getGroup().setItem(event.getCurrentItem().getType());
+                groupMenu.update();
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.openInventory(groupMenu.getInventory());
+                    }
+                }.runTaskLater(plugin, 1);
+            }
+        }
+
+        if (event.getClickedInventory() == null || event.getClickedInventory().getType() == null || event.getClickedInventory().getType().equals(InventoryType.PLAYER)) return;
 
         switch (event.getSlot()) {
             case 3:
@@ -314,6 +329,19 @@ public class GUIClickListener implements Listener {
                         }
                     }, player, plugin);
                 }
+
+                break;
+            case(33):
+
+                plugin.getGroupManager().deleteGroup(groupMenu.getGroup());
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.openInventory(new MainMenu(player, plugin).getInventory());
+                    }
+                }.runTaskLater(plugin, 1);
 
                 break;
             case 49:
