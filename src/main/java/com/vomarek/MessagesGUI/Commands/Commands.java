@@ -1,6 +1,7 @@
 package com.vomarek.MessagesGUI.Commands;
 
 import com.vomarek.MessagesGUI.GUI.GroupMenu;
+import com.vomarek.MessagesGUI.GUI.MainMenu;
 import com.vomarek.MessagesGUI.MessagesGUI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +25,7 @@ public class Commands implements CommandExecutor {
 
                 @Override
                 public void run() {
-                    player.openInventory((new GroupMenu(plugin.getGroupManager().getGroup("default"), player)).getInventory());
+                    player.openInventory((new MainMenu(player, plugin)).getInventory());
                 }
             }.runTaskLater(plugin, 1L);
         }

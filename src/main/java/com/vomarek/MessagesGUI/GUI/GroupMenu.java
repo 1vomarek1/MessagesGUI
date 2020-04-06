@@ -50,7 +50,7 @@ public class GroupMenu implements InventoryHolder {
          * Main menu item
          */
 
-        inventory.setItem(49, createGUIItem(Util.replace(player, "&3Back to main menu"), new ArrayList<>(Collections.singletonList(Util.replace(player, "&aClick &fto go to main menu"))), Material.BARRIER, 1, 0, false));
+        inventory.setItem(49, createGUIItem(Util.replace(player, "&3Back to main menu"), new ArrayList<>(Collections.singletonList(Util.replace(player, "&aClick &fto go to main menu"))), Material.IRON_DOOR, 1, 0, false));
 
 
 
@@ -140,14 +140,14 @@ public class GroupMenu implements InventoryHolder {
     }
 
     public ItemStack createGUIItem(String name, ArrayList<String> lore, Material material, Integer amount, Integer data, boolean enchanted) {
-        ItemStack i = new ItemStack(material, amount.intValue(), (short)data.byteValue());
+        ItemStack i = new ItemStack(material, amount, data.byteValue());
         ItemMeta iMeta = i.getItemMeta();
         iMeta.setDisplayName(name);
         iMeta.setLore(lore);
-        iMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
+        iMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         i.setItemMeta(iMeta);
         if (enchanted)
-            i.addUnsafeEnchantment((Enchantment)GlowEnchantment.GLOW_ENCHANTMENT, 1);
+            i.addUnsafeEnchantment(GlowEnchantment.GLOW_ENCHANTMENT, 1);
         return i;
     }
 }

@@ -72,7 +72,11 @@ public class GroupManager {
     }
 
     public Group createGroup(String name) {
-        Group group = new Group(name, plugin);
+        plugin.getConfigFile().set("Groups."+name+".Priority",0);
+        plugin.getConfigFile().save();
+        final Group group = new Group(name, plugin);
+        groups.put(name, group);
+        sortGroups();
         return group;
     }
 }

@@ -1,6 +1,9 @@
 name: MessagesGUI
 version: ${project.version}
-main: com.vomarek.MessagesGUIMessagesGUI
+main: com.vomarek.MessagesGUI.MessagesGUI
 softdepend: [PlaceholderAPI]
 authors: [1vomarek1]
 website: vomarek.com
+commands:
+  messagesgui:
+    aliases: [joinleave, messages]

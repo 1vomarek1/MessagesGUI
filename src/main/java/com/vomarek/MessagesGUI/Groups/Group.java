@@ -1,6 +1,8 @@
 package com.vomarek.MessagesGUI.Groups;
 
 import com.vomarek.MessagesGUI.MessagesGUI;
+import org.bukkit.Material;
+
 import java.util.HashMap;
 
 public class Group {
@@ -76,5 +78,9 @@ public class Group {
         plugin.getConfigFile().save();
         plugin.getGroupManager().sortGroups();
         return this;
+    }
+
+    public Material getMaterial() {
+        return Material.GRASS;
     }
 }

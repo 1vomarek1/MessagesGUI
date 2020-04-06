@@ -1,6 +1,8 @@
 package com.vomarek.MessagesGUI.Events;
 
 import com.vomarek.MessagesGUI.GUI.GroupMenu;
+import com.vomarek.MessagesGUI.GUI.MainMenu;
+import com.vomarek.MessagesGUI.Groups.Group;
 import com.vomarek.MessagesGUI.MessageAwaiting.AwaiterRunnable;
 import com.vomarek.MessagesGUI.MessageAwaiting.MessageAwaiter;
 import com.vomarek.MessagesGUI.MessagesGUI;
@@ -11,12 +13,105 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import sun.applet.Main;
 
 public class GUIClickListener implements Listener {
     private MessagesGUI plugin;
 
     public GUIClickListener(MessagesGUI plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void MainMenu(InventoryClickEvent event)  {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+
+        if(!(event.getInventory().getHolder() instanceof MainMenu)) return;
+
+        event.setCancelled(true);
+
+        if (event.getClickedInventory() == null || event.getClickedInventory().getType() == null || event.getClickedInventory().getType().equals(InventoryType.PLAYER)) return;
+
+        final Player player = (Player) event.getWhoClicked();
+        final MainMenu mainMenu = (MainMenu) event.getInventory().getHolder();
+
+        switch (event.getSlot()) {
+            case (45):
+
+                mainMenu.setChangeOrder(!mainMenu.getChangeOrder());
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.openInventory(mainMenu.getInventory());
+                    }
+                }.runTaskLater(plugin, 1);
+
+                break;
+            case (49):
+
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.closeInventory();
+                    }
+                }.runTaskLater(plugin, 1);
+
+                break;
+            case (53):
+
+                new BukkitRunnable() {
+                    public void run() {
+                        player.closeInventory();
+                    }
+                }.runTaskLater(plugin, 1L);
+
+                plugin.sendTitle(player, "&3You are creating group", "&fType &ccancel &fto cancel", 0, 2000000000, 0);
+
+
+                new MessageAwaiter(new AwaiterRunnable() {
+                    public void run() {
+                        String message = getMessage();
+
+                        plugin.getGroupManager().createGroup(message);
+                        mainMenu.update();
+
+                        plugin.sendTitle(player, "", "", 0, 0, 0);
+                        player.openInventory(mainMenu.getInventory());
+                    }
+                }, player, plugin);
+
+                break;
+        }
+
+        if (mainMenu.getGroupAt(event.getSlot()) != null) {
+            final Group group = mainMenu.getGroupAt(event.getSlot());
+
+            if (group != null) {
+
+
+                if (mainMenu.getChangeOrder()) {
+
+                    // TODO: Priority changing
+
+                } else {
+                    new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            player.openInventory(new GroupMenu(group, player).getInventory());
+                        }
+
+                    }.runTaskLater(plugin, 1);
+                }
+
+
+            }
+
+        }
+
     }
 
     @EventHandler
@@ -176,8 +271,7 @@ public class GUIClickListener implements Listener {
 
                     @Override
                     public void run() {
-                        player.closeInventory();
-                        // TODO: Open main menu
+                        player.openInventory(new MainMenu(player, plugin).getInventory());
                     }
                 }.runTaskLater(plugin, 1L);
 
