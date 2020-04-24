@@ -5,26 +5,13 @@ import com.vomarek.MessagesGUI.Events.GUIClickListener;
 import com.vomarek.MessagesGUI.Events.MessageEditor;
 import com.vomarek.MessagesGUI.Files.Config;
 import com.vomarek.MessagesGUI.Groups.GroupManager;
-import com.vomarek.MessagesGUI.Util.GlowEnchantment;
-import com.vomarek.MessagesGUI.Util.Util;
-import java.lang.reflect.Field;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MessagesGUI extends JavaPlugin {
     private static MessagesGUI plugin;
-
     private Config config;
-
     private GroupManager groupManager;
-
     private Integer version;
 
     public void onEnable() {
@@ -39,7 +26,6 @@ public final class MessagesGUI extends JavaPlugin {
         }
 
         getVersion();
-        registerGlow();
 
 
         getServer().getPluginManager().registerEvents(new MessageEditor(this), this);
@@ -57,42 +43,6 @@ public final class MessagesGUI extends JavaPlugin {
             version = Integer.parseInt(getServer().getBukkitVersion().split("\\.")[1]);
         } catch (Exception e) {
             version = 8;
-        }
-    }
-
-    public void sendTitle(Player player, String title, String subtitle, Integer fadeIn, Integer stay, Integer fadeout) {
-        if (version >= 12) {
-            player.sendTitle(Util.replace(player, title), Util.replace(player, subtitle), fadeIn, stay, fadeout);
-        } else if (player.getLocation().getWorld().isGameRule("sendCommandFeedback")) {
-
-            player.getLocation().getWorld().setGameRuleValue("sendCommandFeedback", "false");
-
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "subtitle " + player.getName() + " times " + fadeIn + " " + stay + " " + fadeout + " -s");
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "subtitle " + player.getName() + " title [{\"text\": \"" + Util.replace(player, subtitle) + "\"}] -s");
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title [{\"text\": \"" + Util.replace(player, title) + "\"}] -s");
-
-            player.getLocation().getWorld().setGameRuleValue("sendCommandFeedback", "true");
-        } else {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "subtitle " + player.getName() + " times " + fadeIn + " " + stay + " " + fadeout + " -s");
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "subtitle " + player.getName() + " title [{\"text\": \"" + Util.replace(player, subtitle) + "\"}] -s");
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getName() + " title [{\"text\": \"" + Util.replace(player, title) + "\"}] -s");
-        }
-    }
-
-    private void registerGlow() {
-        try {
-            Field f = Enchantment.class.getDeclaredField("acceptingNew");
-            f.setAccessible(true);
-            f.set(null, Boolean.TRUE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            GlowEnchantment glow = new GlowEnchantment(111);
-            Enchantment.registerEnchantment(glow);
-        } catch (IllegalArgumentException ignored) {
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -116,5 +66,9 @@ public final class MessagesGUI extends JavaPlugin {
 
     public GroupManager getGroupManager() {
         return groupManager;
+    }
+
+    public Integer getSpigotVersion() {
+        return version;
     }
 }

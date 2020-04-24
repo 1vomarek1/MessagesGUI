@@ -79,4 +79,16 @@ public class MessageEditor implements Listener {
 
         Bukkit.getConsoleSender().sendMessage(Util.replace(event.getEntity(), group.getDeathMessage()));
     }
+
+    /*
+     * This is where join titles are sent
+     */
+    @EventHandler
+    public void JoinTitles(PlayerJoinEvent event) {
+        Group group = Util.getGroup(event.getPlayer());
+
+        if (group == null) return;
+
+        group.getJoinTitle().send(event.getPlayer());
+    }
 }

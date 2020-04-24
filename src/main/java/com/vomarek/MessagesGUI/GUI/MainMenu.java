@@ -2,11 +2,11 @@ package com.vomarek.MessagesGUI.GUI;
 
 import com.vomarek.MessagesGUI.Groups.Group;
 import com.vomarek.MessagesGUI.MessagesGUI;
-import com.vomarek.MessagesGUI.Util.GlowEnchantment;
 import com.vomarek.MessagesGUI.Util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -14,11 +14,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
 
 public class MainMenu implements InventoryHolder {
     private MessagesGUI plugin;
@@ -153,7 +151,7 @@ public class MainMenu implements InventoryHolder {
         iMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         i.setItemMeta(iMeta);
         if (enchanted)
-            i.addUnsafeEnchantment(GlowEnchantment.GLOW_ENCHANTMENT, 1);
+            i.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         return i;
     }
 }

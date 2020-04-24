@@ -4,10 +4,18 @@ Groups:
     Item: GRASS
     JoinMessage: '&a+ &f%player_displayname%'
     LeaveMessage: '&c- &f%player_displayname%'
-    DeathMessage: '&c♰ player_displayname%'
+    DeathMessage: "&cRIP player_displayname%"
+    JoinTitle:
+      enabled: true
+      Title: '&aWelcome to the server!'
+      Subtitle: '&f%player_displayname%'
   VIP:
-    Priority: 0
+    Priority: 1
     Item: GRASS
     JoinMessage: '&a+ &6%player_displayname%'
     LeaveMessage: '&c- &6%player_displayname%'
-    DeathMessage: '&c♰ &6%player_displayname%'
+    DeathMessage: "&cRIP &6%player_displayname%"
+    JoinTitle:
+      enabled: false
+      Title: '&aWelcome to the server!'
+      Subtitle: '&f%player_displayname%'

@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class Util {
     public static Group getGroup(Player player) {
         for (Map.Entry<String, Group> group : (Iterable<Map.Entry<String, Group>>)MessagesGUI.getPlugin().getGroupManager().getGroups().entrySet()) {
-            if (player.hasPermission("joinmessagesgui.groups.*") || player.hasPermission("joinmessagesgui.*") || player.hasPermission("joinmessagesgui.groups." + ((Group)group.getValue()).getName()))
+            if (player.hasPermission("joinmessagesgui.groups." + ((Group)group.getValue()).getName()))
                 return group.getValue();
         }
         return null;

@@ -6,15 +6,15 @@ import com.vomarek.MessagesGUI.Groups.Group;
 import com.vomarek.MessagesGUI.MessageAwaiting.AwaiterRunnable;
 import com.vomarek.MessagesGUI.MessageAwaiting.MessageAwaiter;
 import com.vomarek.MessagesGUI.MessagesGUI;
+import com.vomarek.MessagesGUI.Titles.Title;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import sun.applet.Main;
 
 public class GUIClickListener implements Listener {
     private MessagesGUI plugin;
@@ -91,8 +91,7 @@ public class GUIClickListener implements Listener {
                     }
                 }.runTaskLater(plugin, 1L);
 
-                plugin.sendTitle(player, "&3You are creating group", "&fType &ccancel &fto cancel", 0, 2000000000, 0);
-
+                new Title("&3You are creating group", "&fType &ccancel &fto cancel", 0, 2000000000, 0).send(player);
 
                 new MessageAwaiter(new AwaiterRunnable() {
                     public void run() {
@@ -101,7 +100,7 @@ public class GUIClickListener implements Listener {
                         plugin.getGroupManager().createGroup(message);
                         mainMenu.update();
 
-                        plugin.sendTitle(player, "", "", 0, 0, 0);
+                        new Title("clear", "", 0, 0, 0).send(player);
                         player.openInventory(mainMenu.getInventory());
                     }
                 }, player, plugin);
@@ -178,16 +177,18 @@ public class GUIClickListener implements Listener {
 
         if (event.getClickedInventory() != null && event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
             if (event.getCurrentItem() != null) {
-                groupMenu.getGroup().setItem(event.getCurrentItem().getType());
-                groupMenu.update();
+                if (!event.getCurrentItem().getType().equals(Material.AIR)) {
+                    groupMenu.getGroup().setItem(event.getCurrentItem().getType());
+                    groupMenu.update();
 
-                new BukkitRunnable() {
+                    new BukkitRunnable() {
 
-                    @Override
-                    public void run() {
-                        player.openInventory(groupMenu.getInventory());
-                    }
-                }.runTaskLater(plugin, 1);
+                        @Override
+                        public void run() {
+                            player.openInventory(groupMenu.getInventory());
+                        }
+                    }.runTaskLater(plugin, 1);
+                }
             }
         }
 
@@ -267,7 +268,7 @@ public class GUIClickListener implements Listener {
                         }
                     }.runTaskLater(plugin, 1L);
 
-                    plugin.sendTitle(player, "&3You are editing group", "&fType &ccancel &fto cancel", 0, 2000000000, 0);
+                    new Title("&3You are editing group", "&fType &ccancel &fto cancel", 0, 2000000000, 0).send(player);
 
                     new MessageAwaiter(new AwaiterRunnable() {
                         public void run() {
@@ -276,7 +277,7 @@ public class GUIClickListener implements Listener {
                             groupMenu.getGroup().setJoinMessage(message);
                             groupMenu.update();
 
-                            plugin.sendTitle(player, "", "", 0, 0, 0);
+                            new Title("clear", "", 0, 0, 0).send(player);
                             player.openInventory(groupMenu.getInventory());
                         }
                     }, player, plugin);
@@ -291,7 +292,7 @@ public class GUIClickListener implements Listener {
                         }
                     }.runTaskLater(plugin, 1L);
 
-                    plugin.sendTitle(player, "&3You are editing group", "&fType &ccancel &fto cancel", 0, 2000000000, 0);
+                    new Title("&3You are editing group", "&fType &ccancel &fto cancel", 0, 2000000000, 0).send(player);
 
                     new MessageAwaiter(new AwaiterRunnable() {
                         public void run() {
@@ -300,7 +301,7 @@ public class GUIClickListener implements Listener {
                             groupMenu.getGroup().setLeaveMessage(message);
                             groupMenu.update();
 
-                            plugin.sendTitle(player, "", "", 0, 0, 0);
+                            new Title("clear", "", 0, 0, 0).send(player);
                             player.openInventory(groupMenu.getInventory());
                         }
                     }, player, plugin);
@@ -315,7 +316,7 @@ public class GUIClickListener implements Listener {
                         }
                     }.runTaskLater(plugin, 1L);
 
-                    plugin.sendTitle(player, "&3You are editing group", "&fType &ccancel &fto cancel", 0, 2000000000, 0);
+                    new Title("&3You are editing group", "&fType &ccancel &fto cancel", 0, 2000000000, 0).send(player);
 
                     new MessageAwaiter(new AwaiterRunnable() {
                         public void run() {
@@ -324,24 +325,80 @@ public class GUIClickListener implements Listener {
                             groupMenu.getGroup().setDeathMessage(message);
                             groupMenu.update();
 
-                            plugin.sendTitle(player, "", "", 0, 0, 0);
+                            new Title("clear", "", 0, 0, 0).send(player);
                             player.openInventory(groupMenu.getInventory());
                         }
                     }, player, plugin);
                 }
 
                 break;
+            case (31):
+                if (groupMenu.getPart().equals("Join")) {
+                    new BukkitRunnable() {
+                        public void run() {
+                            player.closeInventory();
+                        }
+                    }.runTaskLater(plugin, 1L);
+
+
+                    if (event.getClick().equals(ClickType.MIDDLE)) {
+                        groupMenu.getGroup().setIsTitleEnabled(!groupMenu.getGroup().isTitleEnabled());
+                        groupMenu.update();
+
+                        new BukkitRunnable() {
+
+                            @Override
+                            public void run () {
+                                player.openInventory(groupMenu.getInventory());
+                            }
+                        }.runTaskLater(plugin, 1L);
+
+                        return;
+                    }
+
+                    new Title("&3You are editing title", "&fType &ccancel &fto cancel", 0, 2000000000, 0).send(player);
+
+                    if (event.getClick().isLeftClick()) {
+                        new MessageAwaiter(new AwaiterRunnable() {
+                            public void run() {
+                                final String message = getMessage();
+
+                                groupMenu.getGroup().setJoinTitle(new Title(message, groupMenu.getGroup().getJoinTitle().getSubtitle()));
+                                groupMenu.update();
+
+                                new Title("clear", "", 0, 0, 0).send(player);
+                                player.openInventory(groupMenu.getInventory());
+                            }
+                        }, player, plugin);
+                    } else if (event.getClick().isRightClick()) {
+                        new MessageAwaiter(new AwaiterRunnable() {
+                            public void run() {
+                                final String message = getMessage();
+
+                                groupMenu.getGroup().setJoinTitle(new Title(groupMenu.getGroup().getJoinTitle().getTitle(), message));
+                                groupMenu.update();
+
+                                new Title("clear", "", 0, 0, 0).send(player);
+                                player.openInventory(groupMenu.getInventory());
+                            }
+                        }, player, plugin);
+                    }
+
+                }
+                break;
             case(33):
 
-                plugin.getGroupManager().deleteGroup(groupMenu.getGroup());
+                if (groupMenu.getPart().equals("Info")) {
+                    plugin.getGroupManager().deleteGroup(groupMenu.getGroup());
 
-                new BukkitRunnable() {
+                    new BukkitRunnable() {
 
-                    @Override
-                    public void run() {
-                        player.openInventory(new MainMenu(player, plugin).getInventory());
-                    }
-                }.runTaskLater(plugin, 1);
+                        @Override
+                        public void run() {
+                            player.openInventory(new MainMenu(player, plugin).getInventory());
+                        }
+                    }.runTaskLater(plugin, 1);
+                }
 
                 break;
             case 49:
