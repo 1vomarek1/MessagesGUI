@@ -7,3 +7,8 @@ website: vomarek.com
 commands:
   messagesgui:
     aliases: [joinleave, messages]
+permissions:
+  joinmessagesgui.groups.default:
+    default: true
+  joinmessagesgui.admin:
+    default: op

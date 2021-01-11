@@ -6,6 +6,7 @@ import com.vomarek.MessagesGUI.Util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -22,7 +23,7 @@ public class MessageEditor implements Listener {
     /*
      * This is where join messages are changed to custom ones
      */
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH)
     public void JoinMessage(PlayerJoinEvent event) {
 
         event.setJoinMessage(null);
@@ -42,7 +43,7 @@ public class MessageEditor implements Listener {
     /*
      * This is where leave messages are changed to custom ones
      */
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH)
     public void LeaveMessage(PlayerQuitEvent event) {
 
 
@@ -64,7 +65,7 @@ public class MessageEditor implements Listener {
     /*
      * This is where death messages are changed to custom ones
      */
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH)
     public void DeathMessage(PlayerDeathEvent event) {
 
         event.setDeathMessage(null);
@@ -83,7 +84,7 @@ public class MessageEditor implements Listener {
     /*
      * This is where join titles are sent
      */
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH)
     public void JoinTitles(PlayerJoinEvent event) {
         Group group = Util.getGroup(event.getPlayer());
 

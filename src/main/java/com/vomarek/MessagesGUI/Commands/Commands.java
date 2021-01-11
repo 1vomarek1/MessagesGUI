@@ -20,6 +20,8 @@ public class Commands implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
 
+            if (!sender.hasPermission("joinmessagesgui.admin")) return true;
+
             final Player player = (Player) sender;
             new BukkitRunnable() {
 

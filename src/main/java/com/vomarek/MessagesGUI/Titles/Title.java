@@ -1,9 +1,9 @@
 package com.vomarek.MessagesGUI.Titles;
 
-import com.vomarek.MessagesGUI.MessagesGUI;
-import com.vomarek.MessagesGUI.Util.Util;
-import org.bukkit.Bukkit;
+import com.vomarek.MessagesGUI.Util.Reflection;
 import org.bukkit.entity.Player;
+
+import java.lang.reflect.Constructor;
 
 public class Title {
     private String title;
@@ -36,8 +36,20 @@ public class Title {
     }
 
     public void send(Player player) {
-        if (MessagesGUI.getPlugin().getSpigotVersion() >= 9) {
-            player.sendTitle(Util.replace(player, title), Util.replace(player, subtitle), fadein, stay, fadeout);
+        try {
+            Object chatTitle = Reflection.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\": \"" + title + "\"}");
+            Object chatSubtitle = Reflection.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\": \"" + subtitle + "\"}");
+
+            Constructor<?> titleConstructor = Reflection.getNMSClass("PacketPlayOutTitle").getConstructor(Reflection.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], Reflection.getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
+            Object titlePacket = titleConstructor.newInstance(Reflection.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get(null), chatTitle, fadein, stay, fadeout);
+            Object subtitlePacket = titleConstructor.newInstance(Reflection.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get(null), chatSubtitle, fadein, stay, fadeout);
+
+            Reflection.sendPacket(player, titlePacket);
+            Reflection.sendPacket(player, subtitlePacket);
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
